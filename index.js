@@ -254,5 +254,20 @@ async function viewAllRoles() {
     }
 
 
+    async function viewAllDepartments() {
+        try {
+             const res = await client.query(`
+                 SELECT 
+                     name
+                 FROM departments
+             `);
+             console.table(res.rows);
+         } catch (error) {
+             console.error('Error fetching departments:', error);
+         }
+         promptUser();
+     }
+
+
 // Start the application
 connectDB();
