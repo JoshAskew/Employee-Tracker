@@ -89,7 +89,7 @@ async function promptUser() {
             await viewAllDepartments();
             break;
 
-        case 'addDepartment':
+        case 'Add Department':
             await addDepartment();
             break;
 
@@ -160,11 +160,9 @@ async function addEmployee() {
 // Function to update employee role
 async function updateEmployeeRole() {
     try {
-        // Fetch all employees to populate the selection list
         const employeesRes = await client.query('SELECT id, CONCAT(first_name, \' \', last_name) AS full_name FROM employees');
         const employees = employeesRes.rows;
 
-        // Fetch all roles to populate the role selection list
         const rolesRes = await client.query('SELECT id, title FROM roles');
         const roles = rolesRes.rows;
 
@@ -183,7 +181,6 @@ async function updateEmployeeRole() {
             },
         ]);
 
-        // Update the employee's role
         const res = await client.query(
             `UPDATE employees 
              SET role_id = $1 WHERE id = $2`,
@@ -201,7 +198,7 @@ async function updateEmployeeRole() {
 
     promptUser();
 }
-
+// Function to view all roles
 async function viewAllRoles() {
     try {
          const res = await client.query(`
@@ -217,7 +214,7 @@ async function viewAllRoles() {
      promptUser();
  }
 
-
+// Function to add a role
  async function addRole() {
 
     const departmentsRes = await client.query(`SELECT id, name FROM departments`);
@@ -253,12 +250,12 @@ async function viewAllRoles() {
         promptUser();
     }
 
-
+// Function to view all departments
     async function viewAllDepartments() {
         try {
              const res = await client.query(`
                  SELECT 
-                     name
+                     id, name
                  FROM departments
              `);
              console.table(res.rows);
@@ -267,6 +264,27 @@ async function viewAllRoles() {
          }
          promptUser();
      }
+
+// Function to add a department
+async function addDepartment() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'newDepartment',
+            message: 'Enter the name of the new department:',
+        },
+    ]);
+
+    try {
+        await client.query('INSERT INTO departments (name) VALUES ($1)',
+            [answers.newDepartment || null]);
+        console.log('Department added!');
+    } catch (error) {
+        console.error('Error adding department:', error);
+    }
+
+    promptUser();
+}
 
 
 // Start the application
