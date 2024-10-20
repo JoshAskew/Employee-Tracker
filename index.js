@@ -217,5 +217,42 @@ async function viewAllRoles() {
      promptUser();
  }
 
+
+ async function addRole() {
+
+    const departmentsRes = await client.query(`SELECT id, name FROM departments`);
+    const department = departmentsRes.rows;
+
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'Enter the name of the new role you would like to create:',
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'Enter the salary for the new role:',
+        },
+        {
+            type: 'list',
+            name: 'departmentId',
+            message: 'What department is this for?',
+            choices: department.map(department => ({ name: department.name, value: department.id })),
+        },
+    ]);
+
+    try {
+        await client.query('INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)',
+            [answers.title, answers.salary, answers.departmentId]);
+            console.log('Role added!');
+        } catch (error) {
+            console.error('Error adding role:', error);
+        }
+        
+        promptUser();
+    }
+
+
 // Start the application
 connectDB();
