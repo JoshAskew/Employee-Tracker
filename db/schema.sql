@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS tracker_db;
 CREATE DATABASE tracker_db;
 
-\c emptracker_db;
+\c tracker_db;
 
 
 CREATE TABLE departments (

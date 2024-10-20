@@ -202,5 +202,20 @@ async function updateEmployeeRole() {
     promptUser();
 }
 
+async function viewAllRoles() {
+    try {
+         const res = await client.query(`
+             SELECT 
+            roles.title,
+            roles.salary
+             FROM roles
+         `);
+         console.table(res.rows);
+     } catch (error) {
+         console.error('Error fetching all roles:', error);
+     }
+     promptUser();
+ }
+
 // Start the application
 connectDB();
