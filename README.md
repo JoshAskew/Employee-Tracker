@@ -35,7 +35,7 @@ This is a command line application that is designed to allow the user to update 
     ```bash
     npm start
 ## Usage
-The application is used by first installing all needed dependencies and then opening the terminal and then running npm start in the terminal. The user is then propted with a list of options to chose from, followed by clear instructions that follow the selected option.
+The application is used by first installing all needed dependencies and then opening the terminal and then running npm start in the terminal. The user is then prompted with a list of options to chose from, followed by clear instructions that follow the selected option. A link to a video demonstarting the use of the application can be found here: <br> ✨ https://drive.google.com/file/d/1yquAxd2P-zdMhfMQ_Fr8S1LJSVSJ1pHz/view?usp=sharing ✨
 
 ## Contribution
 
