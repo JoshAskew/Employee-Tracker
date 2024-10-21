@@ -61,6 +61,7 @@ async function promptUser() {
                 'Add Department',
                 'Delete Employee',
                 'View Total Utilized Budget',
+                'Delete a Role',
                 'Exit'
             ],
         },
@@ -101,6 +102,10 @@ async function promptUser() {
 
         case 'View Total Utilized Budget':
             await totalBudgetUsed();
+            break;
+
+        case 'Delete a Role':
+            await deleteRole();
             break;
 
         case 'Exit':
@@ -339,6 +344,33 @@ async function totalBudgetUsed() {
     promptUser();
     
 };
+
+async function deleteRole() {
+
+    const rolesRes = await client.query('SELECT id, title FROM roles');
+    const roles= rolesRes.rows;
+    const answers = await inquirer.prompt([
+        {
+        type: 'list',
+        name: 'role',
+        message: 'Which role would you like to remove?',
+        choices: roles.map(roles => ({ name: roles.title, value: roles.id })),
+        },
+    ]);
+
+    try {
+        const res = await client.query('DELETE FROM roles WHERE id = $1', [answers.role]);
+
+        if (res.rowCount > 0) {
+            console.log(`Role with ID ${answers.role} has been deleted.`);
+    } else {
+        console.log('There is no role with that ID.');
+    }
+    } catch (error) {
+        console.error('Error deleting role:', error)
+    }
+    promptUser();
+}
 
 // Start the application
 connectDB();
