@@ -363,11 +363,13 @@ async function deleteRole() {
         },
     ]);
 
+    const selectedRole = roles.find(rol => rol.id === answers.role);
+
     try {
         const res = await client.query('DELETE FROM roles WHERE id = $1', [answers.role]);
 
         if (res.rowCount > 0) {
-            console.log(`Role with ID ${answers.role} has been deleted.`);
+            console.log(`The ${selectedRole.title} role has been deleted.`);
     } else {
         console.log('There is no role with that ID.');
     }
@@ -390,11 +392,13 @@ async function deleteDepartment() {
         },
     ]);
 
+    const selectedDepartment = departments.find(dep => dep.id === answers.department);
+
     try {
         const res = await client.query('DELETE FROM departments WHERE id = $1', [answers.department]);
 
         if (res.rowCount > 0) {
-            console.log(`Department with ID ${answers.department} has been deleted.`);
+            console.log(`${selectedDepartment.name} department has been deleted.`);
     } else {
         console.log('There is no department with that ID.');
     }
