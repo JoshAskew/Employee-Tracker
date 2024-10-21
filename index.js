@@ -53,15 +53,16 @@ async function promptUser() {
             message: 'What would you like to do?',
             choices: [
                 'View all Employees',
-                'Add an Employee',
-                'Update Employee Role',
                 'View all Roles',
-                'Add Role',
                 'View all Departments',
+                'Add an Employee',
+                'Add Role',
                 'Add Department',
-                'Delete Employee',
+                'Update Employee Role',
                 'View Total Utilized Budget',
+                'Delete Employee',
                 'Delete a Role',
+                'Delete a Department',
                 'Exit'
             ],
         },
@@ -106,6 +107,10 @@ async function promptUser() {
 
         case 'Delete a Role':
             await deleteRole();
+            break;
+
+        case 'Delete a Department':
+            await deleteDepartment();
             break;
 
         case 'Exit':
@@ -371,6 +376,33 @@ async function deleteRole() {
     }
     promptUser();
 }
+
+async function deleteDepartment() {
+
+    const departmentRes = await client.query('SELECT id, name FROM departments');
+    const departments= departmentRes.rows;
+    const answers = await inquirer.prompt([
+        {
+        type: 'list',
+        name: 'department',
+        message: 'Which department would you like to remove?',
+        choices: departments.map(departments => ({ name: departments.name, value: departments.id })),
+        },
+    ]);
+
+    try {
+        const res = await client.query('DELETE FROM departments WHERE id = $1', [answers.department]);
+
+        if (res.rowCount > 0) {
+            console.log(`Department with ID ${answers.department} has been deleted.`);
+    } else {
+        console.log('There is no department with that ID.');
+    }
+    } catch (error) {
+        console.error('Error deleting department:', error)
+    }
+    promptUser();
+};
 
 // Start the application
 connectDB();
