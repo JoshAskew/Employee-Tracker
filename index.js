@@ -100,7 +100,7 @@ async function promptUser() {
             break;
 
         case 'View Total Utilized Budget':
-            await totalBudget();
+            await totalBudgetUsed();
             break;
 
         case 'Exit':
@@ -328,7 +328,7 @@ async function deleteEmployee() {
     promptUser();
 };
 
-async function totalBudget() {
+async function totalBudgetUsed() {
     try {
     const res = await client.query('SELECT SUM(salary) AS utilized_budget FROM roles');
     
