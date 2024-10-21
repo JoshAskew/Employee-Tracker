@@ -59,6 +59,7 @@ async function promptUser() {
                 'Add Role',
                 'View all Departments',
                 'Add Department',
+                'Delete Employee',
                 'Exit'
             ],
         },
@@ -91,6 +92,10 @@ async function promptUser() {
 
         case 'Add Department':
             await addDepartment();
+            break;
+
+        case 'Delete Employee':
+            await deleteEmployee();
             break;
 
         case 'Exit':
@@ -292,6 +297,31 @@ async function addDepartment() {
     promptUser();
 }
 
+async function deleteEmployee() {
+    const employeesRes = await client.query('SELECT id, CONCAT(first_name, \' \', last_name) AS full_name FROM employees');
+    const employees = employeesRes.rows;
+    const answers = await inquirer.prompt([
+        {
+        type: 'list',
+        name: 'employee',
+        message: 'Which employee would you like to remove?',
+        choices: employees.map(emp => ({ name: emp.full_name, value: emp.id })),
+        },
+    ]);
+
+    try {
+        const res = await client.query('DELETE FROM employees WHERE id = $1', [answers.employee]);
+
+        if (res.rowCount > 0) {
+            console.log(`Employee with ID ${answers.employee} has been deleted.`);
+    } else {
+        console.log('There is no employee with that ID.');
+    }
+    } catch (error) {
+        console.error('Error deleting employee:', error)
+    }
+    promptUser();
+};
 
 // Start the application
 connectDB();
