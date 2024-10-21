@@ -1,5 +1,6 @@
 # Employee-Tracker
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A command line application  to be able to view and manage departments, roles, and employees in a company so you can organize and plan a business
 
 ## Description

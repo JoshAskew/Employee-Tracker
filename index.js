@@ -60,6 +60,7 @@ async function promptUser() {
                 'View all Departments',
                 'Add Department',
                 'Delete Employee',
+                'View Total Utilized Budget',
                 'Exit'
             ],
         },
@@ -96,6 +97,10 @@ async function promptUser() {
 
         case 'Delete Employee':
             await deleteEmployee();
+            break;
+
+        case 'View Total Utilized Budget':
+            await totalBudget();
             break;
 
         case 'Exit':
@@ -321,6 +326,18 @@ async function deleteEmployee() {
         console.error('Error deleting employee:', error)
     }
     promptUser();
+};
+
+async function totalBudget() {
+    try {
+    const res = await client.query('SELECT SUM(salary) AS utilized_budget FROM roles');
+    
+    console.table(res.rows);
+    } catch (error) {
+        console.error('Error retrieving data:', error)
+    }
+    promptUser();
+    
 };
 
 // Start the application
